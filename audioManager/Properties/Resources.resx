@@ -46,7 +46,7 @@
     
     mimetype: application/x-microsoft.net.object.binary.base64
     value   : The object must be serialized with 
-            : System.Serialization.Formatters.Binary.BinaryFormatter
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
             : and then encoded with base64 encoding.
     
     mimetype: application/x-microsoft.net.object.soap.base64
@@ -60,6 +60,7 @@
             : and then encoded with base64 encoding.
     -->
   <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
     <xsd:element name="root" msdata:IsDataSet="true">
       <xsd:complexType>
         <xsd:choice maxOccurs="unbounded">
@@ -68,9 +69,10 @@
               <xsd:sequence>
                 <xsd:element name="value" type="xsd:string" minOccurs="0" />
               </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" />
+              <xsd:attribute name="name" use="required" type="xsd:string" />
               <xsd:attribute name="type" type="xsd:string" />
               <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="assembly">
@@ -85,9 +87,10 @@
                 <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
                 <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
               </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" msdata:Ordinal="1" />
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
               <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
               <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="resheader">
@@ -109,9 +112,198 @@
     <value>2.0</value>
   </resheader>
   <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="addAlbum" xml:space="preserve">
+    <value>if not exists (select * from albums where album_name=@name and album_date = @date)
+	begin
+	insert into albums(album_name, album_date) values (@name, @date)
+	end</value>
+  </data>
+  <data name="addAuthor" xml:space="preserve">
+    <value>if not exists (select * from authors where author_name=@name)
+	begin
+	insert into authors(author_name) values (@name)
+	end</value>
+  </data>
+  <data name="addCountry" xml:space="preserve">
+    <value>if not exists (select * from countries where country_name=@country)
+	begin
+	insert into countries(country_name) values (@country)
+	end</value>
+  </data>
+  <data name="addFormat" xml:space="preserve">
+    <value>if not exists (select * from formats where format_name=@format)
+	begin
+	insert into formats(format_name) values (@format)
+	end</value>
+  </data>
+  <data name="addGenre" xml:space="preserve">
+    <value>if not exists (select * from genres where genre_name=@genre)
+	begin
+	insert into genres(genre_name) values (@genre)
+	end</value>
+    <comment>Добавляет новый жанр, если его еще не существует в таблице</comment>
+  </data>
+  <data name="addPath" xml:space="preserve">
+    <value>if not exists (select * from paths where path_name=@path)
+	begin
+	insert into paths(path_name) values (@path)
+	end</value>
+  </data>
+  <data name="addSong" xml:space="preserve">
+    <value>if not exists (select * from songs where path_id=(select path_id from paths where path_name=@path+@name+@format_name))
+	begin
+	insert into songs(song_name, duration, song_date) values (@name, @duration, @date)
+	update songs
+		set format_id = (select format_id from formats where format_name=@format_name),
+			path_id = (select path_id from paths where path_name=@path),
+			author_id = (select author_id from authors where author_name=@author_name),
+			genre_id = (select genre_id from genres where genre_name=@genre_name)
+		where song_name = @name;	
+	end</value>
+  </data>
+  <data name="addSongsNAlbums" xml:space="preserve">
+    <value>if not exists (select * from songs_in_albums where song_id=(select song_id from songs where song_name = @song_name))
+	begin
+		insert into songs_in_albums(song_id)
+		(select song_id from songs where song_name = @song_name) 
+		update songs_in_albums
+			set album_id = (select album_id from albums where album_name=@album_name) where song_id = (select song_id from songs where song_name = @song_name) 
+	end</value>
+  </data>
+  <data name="allQuery" xml:space="preserve">
+    <value>select songs.song_id, song_name, author_name, album_name, album_date, format_name, genre_name, duration, song_date, path_name, country_name, track_name from songs
+left join authors
+on songs.author_id = authors.author_id
+left join songs_in_albums
+on songs.song_id = songs_in_albums.song_id
+left join albums
+on songs_in_albums.album_id = albums.album_id
+left join paths
+on songs.path_id = paths.path_id
+left join formats
+on songs.format_id = formats.format_id
+left join countries
+on countries.country_id = songs.country_id
+left join genres
+on songs.genre_id = genres.genre_id;</value>
+    <comment>Полный запрос</comment>
+  </data>
+  <data name="changeAlbumDate" xml:space="preserve">
+    <value>update albums
+	set album_date = @album_date
+	where album_id = (select album_id from songs_in_albums where song_id = @song_id)</value>
+  </data>
+  <data name="changeAlbumDateViaId" xml:space="preserve">
+    <value>update albums
+	set album_date = album_date
+	where album_id = @album_id;</value>
+  </data>
+  <data name="changeAlbumName" xml:space="preserve">
+    <value>update albums
+	set album_name = @album_name
+	where album_id = @album_id;</value>
+  </data>
+  <data name="changeAuthorName" xml:space="preserve">
+    <value>update authors
+	set author_name = @author_name
+	where author_id = @author_id</value>
+  </data>
+  <data name="changeSongAlbum" xml:space="preserve">
+    <value>update songs_in_albums
+	set album_id = (select album_id from albums where album_name = @album_name)
+	where song_id = @song_id;</value>
+  </data>
+  <data name="changeSongAuthor" xml:space="preserve">
+    <value>update songs
+	set author_id = (select author_id from authors where author_name = @author_name)
+	where song_id = @song_id;</value>
+  </data>
+  <data name="changeSongCountry" xml:space="preserve">
+    <value>update songs
+	set country_id = (select country_id from countries where country_name = @country_name)
+	where song_id= @song_id</value>
+  </data>
+  <data name="changeSongDate" xml:space="preserve">
+    <value>update songs
+	set song_date = @song_date
+	where song_id = @song_id;</value>
+  </data>
+  <data name="changeSongGenre" xml:space="preserve">
+    <value>update songs
+	set genre_id = (select genre_id from genres where genre_name = @genre_name)
+	where song_id = @song_id;</value>
+  </data>
+  <data name="changeSongName" xml:space="preserve">
+    <value>update songs
+	set song_name = @song_name
+	where song_id = @song_id;</value>
+  </data>
+  <data name="checkNameSong" xml:space="preserve">
+    <value>select * from songs
+where song_name=@song_name and (select format_name from formats where format_id=songs.format_id) = @format_name
+and (select path_name from paths where path_id=songs.path_id) = @path_name;</value>
+  </data>
+  <data name="checkSong" xml:space="preserve">
+    <value>select song_name, format_name, path_name from songs
+left join formats
+on songs.format_id = formats.format_id
+left join paths
+on songs.path_id = paths.path_id
+where song_name = @song_name and format_name = @format_name and path_name = @path_name;</value>
+  </data>
+  <data name="connectionString" xml:space="preserve">
+    <value>Data Source=DESKTOP-TP148UI;Initial Catalog=\"Music Library\";Integrated Security=True</value>
+    <comment>Строка соединения с БД</comment>
+  </data>
+  <data name="deleteAlbum" xml:space="preserve">
+    <value>delete from albums where album_id = @album_id;</value>
+  </data>
+  <data name="deleteAuthor" xml:space="preserve">
+    <value>delete from authors where author_id = @author_id;</value>
+  </data>
+  <data name="deleteFormat" xml:space="preserve">
+    <value>delete from formats
+	where format_id = @format_id</value>
+  </data>
+  <data name="deletePath" xml:space="preserve">
+    <value>delete from paths
+	where path_id=@path_id</value>
+  </data>
+  <data name="deleteSong" xml:space="preserve">
+    <value>delete from songs
+	where song_id = @song_id</value>
+  </data>
+  <data name="getFormatById" xml:space="preserve">
+    <value>select format_name from songs
+left join formats
+on songs.format_id = formats.format_id
+where song_id=@song_id;</value>
+  </data>
+  <data name="getPathById" xml:space="preserve">
+    <value>select path_name from songs
+left join paths
+on songs.path_id = paths.path_id
+where song_id=@song_id;</value>
+  </data>
+  <data name="mediumQuery" xml:space="preserve">
+    <value>select songs.song_id, song_name, author_name, album_name, duration from songs
+                                        left join songs_in_albums
+                                        on songs.song_id = songs_in_albums.song_id
+                                        left join albums
+                                        on albums.album_id = songs_in_albums.album_id
+                                        left join authors
+                                        on songs.author_id = authors.author_id;</value>
+    <comment>Средний запрос</comment>
+  </data>
+  <data name="shortQuery" xml:space="preserve">
+    <value>select songs.song_id, song_name, album_name from songs
+                                        left join songs_in_albums
+                                        on songs.song_id = songs_in_albums.song_id left join albums on songs_in_albums.album_id = albums.album_id;</value>
+    <comment>Малый запрос</comment>
+  </data>
 </root>
