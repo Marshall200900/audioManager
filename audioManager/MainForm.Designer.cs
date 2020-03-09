@@ -28,22 +28,23 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.table = new System.Windows.Forms.DataGridView();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.файлToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.добавитьФайлыToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.добавитьПапкуToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.импортироватьНаУстройствоToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.запросToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.вывестиСписокПесенToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.вывестиСписокАльбомовToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.вывестиСписокИсполнителейToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.импортироватьВExcelФайлToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.импортToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.импортироватьНаУстройствоToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.справкаToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.оПрограммеToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.searchBox = new System.Windows.Forms.TextBox();
@@ -56,6 +57,7 @@
             this.zeroitMetroButton6 = new Zeroit.Framework.Metro.ZeroitMetroButton();
             this.zeroitMetroButton3 = new Zeroit.Framework.Metro.ZeroitMetroButton();
             this.dragControl1 = new BaseApp_TabControl.DragControl();
+            this.btnImport = new Zeroit.Framework.Metro.ZeroitMetroButton();
             ((System.ComponentModel.ISupportInitialize)(this.table)).BeginInit();
             this.menuStrip1.SuspendLayout();
             this.upperPanel.SuspendLayout();
@@ -67,39 +69,39 @@
             this.table.AllowUserToDeleteRows = false;
             this.table.AllowUserToResizeColumns = false;
             this.table.AllowUserToResizeRows = false;
-            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.ActiveCaption;
-            dataGridViewCellStyle1.ForeColor = System.Drawing.Color.Black;
-            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(24)))), ((int)(((byte)(35)))));
-            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.Color.White;
-            this.table.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle5.BackColor = System.Drawing.SystemColors.ActiveCaption;
+            dataGridViewCellStyle5.ForeColor = System.Drawing.Color.Black;
+            dataGridViewCellStyle5.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(24)))), ((int)(((byte)(35)))));
+            dataGridViewCellStyle5.SelectionForeColor = System.Drawing.Color.White;
+            this.table.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle5;
             this.table.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.table.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(24)))), ((int)(((byte)(35)))));
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.ActiveCaption;
-            dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.ActiveCaption;
-            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.Color.Black;
-            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.table.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle6.BackColor = System.Drawing.SystemColors.ActiveCaption;
+            dataGridViewCellStyle6.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            dataGridViewCellStyle6.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle6.SelectionBackColor = System.Drawing.SystemColors.ActiveCaption;
+            dataGridViewCellStyle6.SelectionForeColor = System.Drawing.Color.Black;
+            dataGridViewCellStyle6.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.table.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle6;
             this.table.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.table.EnableHeadersVisualStyles = false;
             this.table.GridColor = System.Drawing.Color.White;
             this.table.Location = new System.Drawing.Point(12, 100);
             this.table.Name = "table";
-            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.ActiveCaption;
-            dataGridViewCellStyle3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            dataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.ActiveCaption;
-            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.Color.Black;
-            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.table.RowHeadersDefaultCellStyle = dataGridViewCellStyle3;
-            dataGridViewCellStyle4.BackColor = System.Drawing.SystemColors.ActiveCaption;
-            dataGridViewCellStyle4.ForeColor = System.Drawing.Color.Black;
-            dataGridViewCellStyle4.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(24)))), ((int)(((byte)(35)))));
-            dataGridViewCellStyle4.SelectionForeColor = System.Drawing.Color.White;
-            this.table.RowsDefaultCellStyle = dataGridViewCellStyle4;
+            dataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle7.BackColor = System.Drawing.SystemColors.ActiveCaption;
+            dataGridViewCellStyle7.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            dataGridViewCellStyle7.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle7.SelectionBackColor = System.Drawing.SystemColors.ActiveCaption;
+            dataGridViewCellStyle7.SelectionForeColor = System.Drawing.Color.Black;
+            dataGridViewCellStyle7.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.table.RowHeadersDefaultCellStyle = dataGridViewCellStyle7;
+            dataGridViewCellStyle8.BackColor = System.Drawing.SystemColors.ActiveCaption;
+            dataGridViewCellStyle8.ForeColor = System.Drawing.Color.Black;
+            dataGridViewCellStyle8.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(24)))), ((int)(((byte)(35)))));
+            dataGridViewCellStyle8.SelectionForeColor = System.Drawing.Color.White;
+            this.table.RowsDefaultCellStyle = dataGridViewCellStyle8;
             this.table.RowTemplate.DefaultCellStyle.Font = new System.Drawing.Font("Segoe UI", 10F);
             this.table.Size = new System.Drawing.Size(756, 351);
             this.table.TabIndex = 0;
@@ -115,6 +117,7 @@
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.файлToolStripMenuItem,
             this.запросToolStripMenuItem,
+            this.импортToolStripMenuItem,
             this.справкаToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 30);
             this.menuStrip1.Name = "menuStrip1";
@@ -129,8 +132,7 @@
             this.файлToolStripMenuItem.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.файлToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.добавитьФайлыToolStripMenuItem,
-            this.добавитьПапкуToolStripMenuItem,
-            this.импортироватьНаУстройствоToolStripMenuItem});
+            this.добавитьПапкуToolStripMenuItem});
             this.файлToolStripMenuItem.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
             this.файлToolStripMenuItem.Name = "файлToolStripMenuItem";
             this.файлToolStripMenuItem.Size = new System.Drawing.Size(48, 20);
@@ -139,22 +141,16 @@
             // добавитьФайлыToolStripMenuItem
             // 
             this.добавитьФайлыToolStripMenuItem.Name = "добавитьФайлыToolStripMenuItem";
-            this.добавитьФайлыToolStripMenuItem.Size = new System.Drawing.Size(243, 22);
+            this.добавитьФайлыToolStripMenuItem.Size = new System.Drawing.Size(167, 22);
             this.добавитьФайлыToolStripMenuItem.Text = "Добавить файлы";
             this.добавитьФайлыToolStripMenuItem.Click += new System.EventHandler(this.добавитьФайлыToolStripMenuItem_Click);
             // 
             // добавитьПапкуToolStripMenuItem
             // 
             this.добавитьПапкуToolStripMenuItem.Name = "добавитьПапкуToolStripMenuItem";
-            this.добавитьПапкуToolStripMenuItem.Size = new System.Drawing.Size(243, 22);
+            this.добавитьПапкуToolStripMenuItem.Size = new System.Drawing.Size(167, 22);
             this.добавитьПапкуToolStripMenuItem.Text = "Добавить папку";
             this.добавитьПапкуToolStripMenuItem.Click += new System.EventHandler(this.добавитьПапкуToolStripMenuItem_Click);
-            // 
-            // импортироватьНаУстройствоToolStripMenuItem
-            // 
-            this.импортироватьНаУстройствоToolStripMenuItem.Name = "импортироватьНаУстройствоToolStripMenuItem";
-            this.импортироватьНаУстройствоToolStripMenuItem.Size = new System.Drawing.Size(243, 22);
-            this.импортироватьНаУстройствоToolStripMenuItem.Text = "Импортировать на устройство";
             // 
             // запросToolStripMenuItem
             // 
@@ -194,6 +190,21 @@
             this.импортироватьВExcelФайлToolStripMenuItem.Size = new System.Drawing.Size(244, 22);
             this.импортироватьВExcelФайлToolStripMenuItem.Text = "Импортировать в Excel файл";
             this.импортироватьВExcelФайлToolStripMenuItem.Click += new System.EventHandler(this.импортироватьВExcelФайлToolStripMenuItem_Click);
+            // 
+            // импортToolStripMenuItem
+            // 
+            this.импортToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.импортироватьНаУстройствоToolStripMenuItem1});
+            this.импортToolStripMenuItem.Name = "импортToolStripMenuItem";
+            this.импортToolStripMenuItem.Size = new System.Drawing.Size(63, 20);
+            this.импортToolStripMenuItem.Text = "Импорт";
+            // 
+            // импортироватьНаУстройствоToolStripMenuItem1
+            // 
+            this.импортироватьНаУстройствоToolStripMenuItem1.Name = "импортироватьНаУстройствоToolStripMenuItem1";
+            this.импортироватьНаУстройствоToolStripMenuItem1.Size = new System.Drawing.Size(180, 22);
+            this.импортироватьНаУстройствоToolStripMenuItem1.Text = "Импортировать";
+            this.импортироватьНаУстройствоToolStripMenuItem1.Click += new System.EventHandler(this.импортироватьНаУстройствоToolStripMenuItem1_Click);
             // 
             // справкаToolStripMenuItem
             // 
@@ -343,7 +354,7 @@
             this.zeroitMetroButton3.DisabledColor = System.Drawing.Color.FromArgb(((int)(((byte)(250)))), ((int)(((byte)(250)))), ((int)(((byte)(250)))));
             this.zeroitMetroButton3.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.zeroitMetroButton3.HoverColor = System.Drawing.SystemColors.ActiveCaption;
-            this.zeroitMetroButton3.Location = new System.Drawing.Point(305, 60);
+            this.zeroitMetroButton3.Location = new System.Drawing.Point(438, 60);
             this.zeroitMetroButton3.Name = "zeroitMetroButton3";
             this.zeroitMetroButton3.PressedColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(92)))), ((int)(((byte)(136)))));
             this.zeroitMetroButton3.RoundingArc = 23;
@@ -356,12 +367,31 @@
             // 
             this.dragControl1.SelectControl = this.upperPanel;
             // 
+            // btnImport
+            // 
+            this.btnImport.BackColor = System.Drawing.SystemColors.ActiveCaption;
+            this.btnImport.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+            this.btnImport.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(98)))), ((int)(((byte)(98)))), ((int)(((byte)(98)))));
+            this.btnImport.DefaultColor = System.Drawing.SystemColors.ActiveCaption;
+            this.btnImport.DisabledColor = System.Drawing.Color.FromArgb(((int)(((byte)(250)))), ((int)(((byte)(250)))), ((int)(((byte)(250)))));
+            this.btnImport.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.btnImport.HoverColor = System.Drawing.SystemColors.ActiveCaption;
+            this.btnImport.Location = new System.Drawing.Point(305, 60);
+            this.btnImport.Name = "btnImport";
+            this.btnImport.PressedColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(92)))), ((int)(((byte)(136)))));
+            this.btnImport.RoundingArc = 23;
+            this.btnImport.Size = new System.Drawing.Size(127, 23);
+            this.btnImport.TabIndex = 15;
+            this.btnImport.Text = "Добавить в импорт";
+            this.btnImport.Click += new System.EventHandler(this.zeroitMetroButton5_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(24)))), ((int)(((byte)(35)))));
             this.ClientSize = new System.Drawing.Size(780, 475);
+            this.Controls.Add(this.btnImport);
             this.Controls.Add(this.zeroitMetroButton3);
             this.Controls.Add(this.zeroitMetroButton6);
             this.Controls.Add(this.settingsButton);
@@ -392,7 +422,6 @@
         private System.Windows.Forms.ToolStripMenuItem файлToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem добавитьФайлыToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem добавитьПапкуToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem импортироватьНаУстройствоToolStripMenuItem;
         private System.Windows.Forms.TextBox searchBox;
         private BaseApp_TabControl.DragControl dragControl1;
         private Zeroit.Framework.Metro.ZeroitMetroButton btnSave;
@@ -410,6 +439,9 @@
         private System.Windows.Forms.ToolStripMenuItem вывестиСписокИсполнителейToolStripMenuItem;
         private Zeroit.Framework.Metro.ZeroitMetroButton zeroitMetroButton6;
         private Zeroit.Framework.Metro.ZeroitMetroButton zeroitMetroButton3;
+        private System.Windows.Forms.ToolStripMenuItem импортToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem импортироватьНаУстройствоToolStripMenuItem1;
+        private Zeroit.Framework.Metro.ZeroitMetroButton btnImport;
     }
 }
 

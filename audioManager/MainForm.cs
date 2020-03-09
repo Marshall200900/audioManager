@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ClosedXML.Excel;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -11,6 +12,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using TagLib;
+using System.Threading;
 
 namespace audioManager
 {
@@ -18,7 +20,9 @@ namespace audioManager
     {
         bool changed = false;
         string changingCell = "";
+        int counterToImport = 0;
         List<int> rowsToSave = new List<int>();
+        List<int> rowsToImport = new List<int>();
         List<string> columnsToSave = new List<string>();
         public enum State
         {
@@ -531,6 +535,7 @@ namespace audioManager
 
         private void вывестиСписокАльбомовToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            btnImport.Enabled = false;
             if (CurState == State.Albums) return;
             if (changed)
             {
@@ -557,6 +562,8 @@ namespace audioManager
 
         private void вывестиСписокПесенToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            btnImport.Enabled = true;
+
             if (CurState == State.ShortSongs || CurState == State.MediumSongs || CurState == State.AllSongs) return;
             if (changed)
             {
@@ -593,6 +600,8 @@ namespace audioManager
         }
         private void вывестиСписокИсполнителейToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            btnImport.Enabled = false;
+
             if (CurState == State.Authors) return;
             if (changed)
             {
@@ -661,7 +670,65 @@ namespace audioManager
 
         private void импортироватьВExcelФайлToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Microsoft
+            //Creating DataTable.
+            DataTable dt = new DataTable();
+
+            //Adding the Columns.
+            foreach (DataGridViewColumn column in table.Columns)
+            {
+                dt.Columns.Add(column.HeaderText);
+            }
+
+            //Adding the Rows.
+            foreach (DataGridViewRow row in table.Rows)
+            {
+                dt.Rows.Add();
+                foreach (DataGridViewCell cell in row.Cells)
+                {
+                    dt.Rows[dt.Rows.Count - 1][cell.ColumnIndex] = cell.Value.ToString();
+                }
+            }
+            SaveFileDialog dialog = new SaveFileDialog();
+            dialog.Filter = "xlsx files (*.xlsx)|*.xlsx";
+            if (dialog.ShowDialog() == DialogResult.OK)
+            {
+
+                using (XLWorkbook wb = new XLWorkbook())
+                {
+                    wb.Worksheets.Add(dt, "Music");
+                    wb.SaveAs(dialog.FileName);
+                }
+            }
+            
+        }
+
+        private void импортироватьНаУстройствоToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            FolderBrowserDialog dialog = new FolderBrowserDialog();
+            Copying copying = new Copying(rowsToImport);
+            var res = dialog.ShowDialog();
+            
+            if(res == DialogResult.OK)
+            {
+                copying.path = dialog.SelectedPath;
+                copying.ShowDialog();
+                
+            }
+            counterToImport = 0;
+        }
+        
+
+        private void zeroitMetroButton5_Click(object sender, EventArgs e)
+        {
+            foreach(DataGridViewRow a in table.SelectedRows)
+            {
+                if (!rowsToImport.Contains(int.Parse(a.Cells[0].ToString())))
+                {
+                    counterToImport++;
+                    rowsToImport.Add(int.Parse(a.Cells[0].Value.ToString()));
+                }
+            }
+            MessageBox.Show("Добавлено строк: " + counterToImport.ToString());
         }
     }
    
