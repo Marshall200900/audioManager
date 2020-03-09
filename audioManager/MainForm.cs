@@ -633,13 +633,35 @@ namespace audioManager
                     SqlDatabase.DeleteSongs(rows);
                     break;
                 case State.Albums:
-
+                    try
+                    {
+                        SqlDatabase.DeleteAlbums(rows);
+                    }
+                    catch (SqlException)
+                    {
+                        MessageBox.Show("Невозможно удалить выбранные альбомы, так как в этих альбомах есть песни");
+                        return;
+                    }
                     break;
                 case State.Authors:
-
+                    try
+                    {
+                        SqlDatabase.DeleteAuthors(rows);
+                    }
+                    catch (SqlException)
+                    {
+                        MessageBox.Show("Невозможно удалить выбранных авторов, так как в базе данных есть песни этих авторов");
+                        return;
+                    }
                     break;
             }
             UpdateTable();
+            MessageBox.Show("Удаление прошло успешно!");
+        }
+
+        private void импортироватьВExcelФайлToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Microsoft
         }
     }
    

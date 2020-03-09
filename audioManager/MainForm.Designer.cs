@@ -193,6 +193,7 @@
             this.импортироватьВExcelФайлToolStripMenuItem.Name = "импортироватьВExcelФайлToolStripMenuItem";
             this.импортироватьВExcelФайлToolStripMenuItem.Size = new System.Drawing.Size(244, 22);
             this.импортироватьВExcelФайлToolStripMenuItem.Text = "Импортировать в Excel файл";
+            this.импортироватьВExcelФайлToolStripMenuItem.Click += new System.EventHandler(this.импортироватьВExcelФайлToolStripMenuItem_Click);
             // 
             // справкаToolStripMenuItem
             // 
