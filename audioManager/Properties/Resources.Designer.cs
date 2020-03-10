@@ -389,6 +389,21 @@ namespace audioManager.Properties {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на select path_name+&apos;\&apos;+song_name+&apos;.&apos;+format_name
+        ///from songs
+        ///join paths 
+        ///on songs.path_id = paths.path_id
+        ///join formats
+        ///on songs.format_id = formats.format_id
+        ///where song_id = @song_id;.
+        /// </summary>
+        internal static string getFullPath {
+            get {
+                return ResourceManager.GetString("getFullPath", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на select path_name from songs
         ///left join paths
         ///on songs.path_id = paths.path_id

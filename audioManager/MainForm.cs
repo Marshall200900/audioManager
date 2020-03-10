@@ -20,7 +20,6 @@ namespace audioManager
     {
         bool changed = false;
         string changingCell = "";
-        int counterToImport = 0;
         List<int> rowsToSave = new List<int>();
         List<int> rowsToImport = new List<int>();
         List<string> columnsToSave = new List<string>();
@@ -30,7 +29,8 @@ namespace audioManager
             MediumSongs,
             AllSongs,
             Albums,
-            Authors
+            Authors,
+            ToImport
         }
         public State CurState = State.MediumSongs;
         public MainForm()
@@ -95,16 +95,19 @@ namespace audioManager
                 openFileDialog.Filter = "Music files (*.mp3, *.flac, *.wav)|*.mp3;*.flac;*.wav";
                 openFileDialog.FilterIndex = 2;
                 openFileDialog.RestoreDirectory = true;
-
+                openFileDialog.Multiselect = true;
                 if (openFileDialog.ShowDialog() == DialogResult.OK)
                 {
-                    //Get the path of specified file
-                    filePath = openFileDialog.FileName;
-      
-                    var file = TagLib.File.Create(filePath);
-                    
-                    SqlDatabase.AddFile(file);
+                    foreach(var filename in openFileDialog.FileNames)
+                    {
+                        //Get the path of specified file
+                        filePath = filename;
 
+                        var file = TagLib.File.Create(filePath);
+
+                        SqlDatabase.AddFile(file);
+                    }
+                   
 
                     UpdateTable();
                 }
@@ -490,7 +493,7 @@ namespace audioManager
             if (table.Rows[e.RowIndex].Cells[e.ColumnIndex].Value != null && table.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString() != changingCell && (table.Columns[e.ColumnIndex].Name == "duration"
                 || table.Columns[e.ColumnIndex].Name == "format_name" || table.Columns[e.ColumnIndex].Name == "directory")
                  || table.Columns[e.ColumnIndex].Name == "song_id"
-                 || table.Columns[e.ColumnIndex].Name == "path_name")
+                 || table.Columns[e.ColumnIndex].Name == "path_name" || table.Columns[e.ColumnIndex].Name == "song_name")
             {
                 table.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = changingCell;
                 MessageBox.Show("Невозможно изменить это значение");
@@ -536,6 +539,8 @@ namespace audioManager
         private void вывестиСписокАльбомовToolStripMenuItem_Click(object sender, EventArgs e)
         {
             btnImport.Enabled = false;
+            btnNoImport.Enabled = false;
+
             if (CurState == State.Albums) return;
             if (changed)
             {
@@ -563,6 +568,7 @@ namespace audioManager
         private void вывестиСписокПесенToolStripMenuItem_Click(object sender, EventArgs e)
         {
             btnImport.Enabled = true;
+            btnNoImport.Enabled = true;
 
             if (CurState == State.ShortSongs || CurState == State.MediumSongs || CurState == State.AllSongs) return;
             if (changed)
@@ -601,7 +607,7 @@ namespace audioManager
         private void вывестиСписокИсполнителейToolStripMenuItem_Click(object sender, EventArgs e)
         {
             btnImport.Enabled = false;
-
+            btnNoImport.Enabled = false;
             if (CurState == State.Authors) return;
             if (changed)
             {
@@ -698,12 +704,20 @@ namespace audioManager
                     wb.Worksheets.Add(dt, "Music");
                     wb.SaveAs(dialog.FileName);
                 }
+                MessageBox.Show("Успешно сохранено!");
             }
             
         }
 
         private void импортироватьНаУстройствоToolStripMenuItem1_Click(object sender, EventArgs e)
         {
+            if (rowsToImport.Count == 0)
+            {
+                MessageBox.Show("Сначала файлы для импорта");
+                return;
+
+
+            }
             FolderBrowserDialog dialog = new FolderBrowserDialog();
             Copying copying = new Copying(rowsToImport);
             var res = dialog.ShowDialog();
@@ -711,24 +725,66 @@ namespace audioManager
             if(res == DialogResult.OK)
             {
                 copying.path = dialog.SelectedPath;
-                copying.ShowDialog();
-                
+                try
+                {
+                    copying.ShowDialog();
+                }
+                catch (UnauthorizedAccessException)
+                {
+                    MessageBox.Show("Невозможно скопировать в эту директорию");
+                    return;
+                }
             }
-            counterToImport = 0;
+            rowsToImport.Clear();
         }
         
 
         private void zeroitMetroButton5_Click(object sender, EventArgs e)
         {
-            foreach(DataGridViewRow a in table.SelectedRows)
+            foreach (DataGridViewRow row in table.SelectedRows)
             {
-                if (!rowsToImport.Contains(int.Parse(a.Cells[0].ToString())))
+                int id = int.Parse(row.Cells[0].Value.ToString());
+                if (!rowsToImport.Contains(id))
                 {
-                    counterToImport++;
-                    rowsToImport.Add(int.Parse(a.Cells[0].Value.ToString()));
+                    rowsToImport.Add(id);
                 }
             }
-            MessageBox.Show("Добавлено строк: " + counterToImport.ToString());
+            MessageBox.Show("Добавлены выбранные элементы");
+        }
+
+        private void оПрограммеToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            new About().ShowDialog();
+        }
+
+        private void btnNoImport_Click(object sender, EventArgs e)
+        {
+            foreach (DataGridViewRow row in table.SelectedRows)
+            {
+                int id = int.Parse(row.Cells[0].Value.ToString());
+                if (rowsToImport.Contains(id))
+                {
+                    rowsToImport.Remove(id);
+                }
+            }
+            MessageBox.Show("Удалены выбранные элементы");
+        }
+
+        private void отобразитьВыбранныеПесниToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            foreach (DataGridViewRow row in table.Rows)
+            {
+
+                if (rowsToImport.Contains(int.Parse(row.Cells[0].Value.ToString())))
+                {
+                    row.Visible = true;
+                }
+                else
+                {
+                    row.Visible = false;
+                }
+
+            }
         }
     }
    

@@ -284,6 +284,15 @@ left join formats
 on songs.format_id = formats.format_id
 where song_id=@song_id;</value>
   </data>
+  <data name="getFullPath" xml:space="preserve">
+    <value>select path_name+'\'+song_name+'.'+format_name
+from songs
+join paths 
+on songs.path_id = paths.path_id
+join formats
+on songs.format_id = formats.format_id
+where song_id = @song_id;</value>
+  </data>
   <data name="getPathById" xml:space="preserve">
     <value>select path_name from songs
 left join paths

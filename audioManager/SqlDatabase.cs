@@ -95,7 +95,8 @@ namespace audioManager
         }
         public static void AddFile(TagLib.File file)
         {
-            string name = file.Tag.Title;
+            string name = file.Name.Substring(file.Name.LastIndexOf('\\')+1, file.Name.LastIndexOf('.')- file.Name.LastIndexOf('\\')-1);
+
             int duration = (int)file.Properties.Duration.TotalSeconds;
             string format = file.Name.Split('.').Last();
             string album = file.Tag.Album;
@@ -116,7 +117,19 @@ namespace audioManager
             AddSong(name, duration, year, format, path, artist, genre);
             AddSongsNAlbums(name, album);
         }
+        public static string GetFullPath(int song_id)
+        {
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = Connection;
+            cmd.CommandText = Properties.Resources.getFullPath;
+            cmd.Parameters.AddWithValue("@song_id", song_id);
+            SqlDataReader reader = cmd.ExecuteReader();
+            reader.Read();
+            var a = reader[0].ToString();
+            reader.Close();
+            return a;
 
+        }
         public static bool CheckSong(string path, string name, string format)
         {
             SqlCommand cmd = new SqlCommand();
