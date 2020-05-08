@@ -11,16 +11,14 @@ namespace audioManager
     static class SqlDatabase
     {
 
-        public static string GetQuery(MainForm.State state)
+        public static string GetQuery(MainForm.Table state)
         {
             switch (state)
             {
-                case MainForm.State.ShortSongs: return Properties.Resources.shortQuery;
-                case MainForm.State.MediumSongs: return Properties.Resources.mediumQuery;
-                case MainForm.State.AllSongs: return Properties.Resources.allQuery;
-                case MainForm.State.Albums: return "select * from albums";
-                case MainForm.State.Authors: return "select * from authors";
-              
+                case MainForm.Table.Import:
+                case MainForm.Table.Songs: return Properties.Resources.allQuery;
+                case MainForm.Table.Albums: return "select * from albums";
+                case MainForm.Table.Authors: return "select * from authors";
             }
             return null;
         }
@@ -77,10 +75,9 @@ namespace audioManager
             Connection.Close();
 
         }
-        public static List<string> GetColumnNames(MainForm.State state)
+        public static List<string> GetColumnNames(MainForm.Table state)
         {
             SqlCommand command = new SqlCommand(GetQuery(state), Connection);
-
             // Open the connection in a try/catch block. 
             // Create and execute the DataReader, writing the result
             // set to the console window.

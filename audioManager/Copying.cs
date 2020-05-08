@@ -20,6 +20,7 @@ namespace audioManager
         {
             InitializeComponent();
             btnCancel.DialogResult = DialogResult.Cancel;
+            btnBegin.DialogResult = DialogResult.OK;
             this.ids = ids;
             
         }
@@ -54,19 +55,21 @@ namespace audioManager
             List<string> paths = new List<string>();
             foreach(int id in ids)
             {
-                try
-                {
-                    paths.Add(SqlDatabase.GetFullPath(id));
-                }
-                catch(Exception)
-                {
-                    errors += id + " ";
-                }
+                paths.Add(SqlDatabase.GetFullPath(id));
+
+                
             }
 
             foreach (var file in paths)
             {
-                File.Copy(file, path + '\\' + file.Split('\\').Last());
+                try
+                {
+                    File.Copy(file, path + '\\' + file.Split('\\').Last());
+                }
+                catch (Exception)
+                {
+                    errors += file.Split('\\').Last() + " ";
+                }
 
             }
             if (errors == "")
@@ -78,12 +81,12 @@ namespace audioManager
                 MessageBox.Show("Копирование закончено!+\nНе пересены песни с id:" +errors);
 
             }
-            Dispose();
+            Close();
         }
 
         private void zeroitMetroButton2_Click(object sender, EventArgs e)
         {
-            Dispose();
+            Close();
 
         }
     }

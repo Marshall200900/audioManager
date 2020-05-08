@@ -13,12 +13,12 @@ namespace audioManager
     public partial class Settings : Form
     {
         MainForm Form;
-        MainForm.State st;
-        public Settings(Form form, MainForm.State state)
+        MainForm.Appearance st;
+        public Settings(Form form, MainForm.Appearance state)
         {
             InitializeComponent();
             btnOk.DialogResult = DialogResult.OK;
-            btnCancel.DialogResult = DialogResult.OK;
+            btnCancel.DialogResult = DialogResult.Cancel;
             //btnCancel.DialogResult = DialogResult.OK;
 
             st = state;
@@ -26,11 +26,11 @@ namespace audioManager
 
             switch (state)
             {
-                case MainForm.State.ShortSongs: radioButton1.Checked = true;
+                case MainForm.Appearance.ShortSongs: radioButton1.Checked = true;
                     break;
-                case MainForm.State.MediumSongs: radioButton2.Checked = true;
+                case MainForm.Appearance.MediumSongs: radioButton2.Checked = true;
                     break;
-                case MainForm.State.AllSongs: radioButton3.Checked = true;
+                case MainForm.Appearance.AllSongs: radioButton3.Checked = true;
                     break;
             }
         }
@@ -39,15 +39,15 @@ namespace audioManager
         {
             if (radioButton1.Checked)
             {
-                Form.CurState = MainForm.State.ShortSongs;
+                Form.CurState = MainForm.Appearance.ShortSongs;
             }
             else if (radioButton2.Checked)
             {
-                Form.CurState = MainForm.State.MediumSongs;
+                Form.CurState = MainForm.Appearance.MediumSongs;
             }
             else
             {
-                Form.CurState = MainForm.State.AllSongs;
+                Form.CurState = MainForm.Appearance.AllSongs;
             }
         }
         private void radioButton1_CheckedChanged(object sender, EventArgs e)

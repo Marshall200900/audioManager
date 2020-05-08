@@ -329,6 +329,27 @@ namespace audioManager.Properties {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на select songs.song_id song_name, author_name, album_name, format_name, genre_name, duration, song_date, path_name, country_name, track_name from songs
+        ///left join authors
+        ///on songs.author_id = authors.author_id
+        ///left join songs_in_albums
+        ///on songs.song_id = songs_in_albums.song_id
+        ///left join albums
+        ///on songs_in_albums.album_id = albums.album_id
+        ///left join paths
+        ///on songs.path_id = paths.path_id
+        ///left join formats
+        ///on songs.format_id = formats.format_id
+        ///left join countries
+        ///on countries.country_id = songs.cou [остаток строки не уместился]&quot;;.
+        /// </summary>
+        internal static string constructorQuery {
+            get {
+                return ResourceManager.GetString("constructorQuery", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на delete from albums where album_id = @album_id;.
         /// </summary>
         internal static string deleteAlbum {

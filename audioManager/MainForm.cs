@@ -20,24 +20,33 @@ namespace audioManager
     {
         bool changed = false;
         string changingCell = "";
-        List<int> rowsToSave = new List<int>();
-        List<int> rowsToImport = new List<int>();
+        List<DataGridViewRow> importList = new List<DataGridViewRow>();
+        List<int> idsToSave = new List<int>();
+        List<int> idsToDelete = new List<int>();
         List<string> columnsToSave = new List<string>();
-        public enum State
+        public enum Appearance
         {
             ShortSongs,
             MediumSongs,
             AllSongs,
+
+        }
+        public enum Table
+        {
+            Songs,
             Albums,
             Authors,
-            ToImport
+            Import
         }
-        public State CurState = State.MediumSongs;
+        public Appearance CurState = Appearance.MediumSongs;
+        public Table CurRequest = Table.Songs;
+
         public MainForm()
         {
             SqlDatabase.Connect();
             InitializeComponent();
-            UpdateTable();
+            LoadTable();
+            //ImportTable.Columns.AddRange()
         }
 
         private void открытьToolStripMenuItem_Click(object sender, EventArgs e)
@@ -109,7 +118,7 @@ namespace audioManager
                     }
                    
 
-                    UpdateTable();
+                    LoadTable();
                 }
             }
         }
@@ -138,7 +147,7 @@ namespace audioManager
                     }
                     
                     SqlDatabase.AddFiles(files);
-                    UpdateTable();
+                    LoadTable();
                 }
             }
 
@@ -182,10 +191,18 @@ namespace audioManager
 
         private void button3_Click(object sender, EventArgs e)
         {
+            var a = CurState;
             Settings settings = new Settings(this, CurState);
-            settings.ShowDialog();
-            
-            UpdateTable();
+            if (settings.ShowDialog() == DialogResult.OK)
+            {
+                UpdateAppearance();
+
+            }
+            else
+            {
+                CurState = a;
+            }
+
             //if(settings.DialogResult == DialogResult.OK)
             //{
             //    settings.Close();
@@ -215,19 +232,19 @@ namespace audioManager
         {
 
             int id;
-            for (int i = 0; i < rowsToSave.Count; i++)
+            for (int i = 0; i < idsToSave.Count; i++)
             {
 
                 switch (columnsToSave[i])
                 {
                     case "album_name":
-                        id = int.Parse(table.Rows[rowsToSave[i]].Cells[table.Columns["album_id"].Index].Value.ToString());
-                        string author_name = table.Rows[rowsToSave[i]].Cells[table.Columns["album_name"].Index].Value.ToString();
+                        id = int.Parse(table.Rows[idsToSave[i]].Cells[table.Columns["album_id"].Index].Value.ToString());
+                        string author_name = table.Rows[idsToSave[i]].Cells[table.Columns["album_name"].Index].Value.ToString();
                         SqlDatabase.ChangeAlbumName(id, author_name);
                         break;
                     case "album_date":
-                        id = int.Parse(table.Rows[rowsToSave[i]].Cells[table.Columns["album_id"].Index].Value.ToString());
-                        int date = int.Parse(table.Rows[rowsToSave[i]].Cells[table.Columns["album_date"].Index].Value.ToString());
+                        id = int.Parse(table.Rows[idsToSave[i]].Cells[table.Columns["album_id"].Index].Value.ToString());
+                        int date = int.Parse(table.Rows[idsToSave[i]].Cells[table.Columns["album_date"].Index].Value.ToString());
                         SqlDatabase.ChangeAlbumDateViaId(id, date);
                         break;
                 }
@@ -236,13 +253,13 @@ namespace audioManager
         public void SaveAuthors()
         {
             int id;
-            for (int i = 0; i < rowsToSave.Count; i++)
+            for (int i = 0; i < idsToSave.Count; i++)
             {
                 switch (columnsToSave[i])
                 {
                     case "author_name":
-                        id = int.Parse(table.Rows[rowsToSave[i]].Cells[table.Columns["author_id"].Index].Value.ToString());
-                        string author_name = table.Rows[rowsToSave[i]].Cells[table.Columns["author_name"].Index].Value.ToString();
+                        id = int.Parse(table.Rows[idsToSave[i]].Cells[table.Columns["author_id"].Index].Value.ToString());
+                        string author_name = table.Rows[idsToSave[i]].Cells[table.Columns["author_name"].Index].Value.ToString();
                         SqlDatabase.ChangeAuthorName(id, author_name);
                         break;
                 }
@@ -250,112 +267,165 @@ namespace audioManager
         }
         public void SaveSongs()
         {
-            int id;
-            for (int i = 0; i < rowsToSave.Count; i++)
+
+            
+            for (int i = 0; i < idsToSave.Count; i++)
             {
+                DataGridViewRow row = table.Rows
+                    .Cast<DataGridViewRow>()
+                    .Where(r => r.Cells["song_id"].Value.ToString().Equals(idsToSave[i].ToString()))
+                    .First();
                 switch (columnsToSave[i])
                 {
                     case "song_name":
-                        id = int.Parse(table.Rows[rowsToSave[i]].Cells[table.Columns["song_id"].Index].Value.ToString());
-                        string newname = table.Rows[rowsToSave[i]].Cells[table.Columns["song_name"].Index].Value.ToString();
-                        SqlDatabase.ChangeName(id, newname);
+                        string newname = row.Cells[table.Columns["song_name"].Index].Value.ToString();
+                        SqlDatabase.ChangeName(idsToSave[i], newname);
                         break;
                     case "genre_name":
-                        id = int.Parse(table.Rows[rowsToSave[i]].Cells[table.Columns["song_id"].Index].Value.ToString());
-                        string genre = table.Rows[rowsToSave[i]].Cells[table.Columns["genre_name"].Index].Value.ToString();
+                        string genre = row.Cells[table.Columns["genre_name"].Index].Value.ToString();
                         SqlDatabase.AddGenre(genre);
-                        SqlDatabase.ChangeGenre(id, genre);
+                        SqlDatabase.ChangeGenre(idsToSave[i], genre);
                         break;
                     case "author_name":
-                        id = int.Parse(table.Rows[rowsToSave[i]].Cells[table.Columns["song_id"].Index].Value.ToString());
-                        string author = table.Rows[rowsToSave[i]].Cells[table.Columns["author_name"].Index].Value.ToString();
+                        string author = row.Cells[table.Columns["author_name"].Index].Value.ToString();
                         SqlDatabase.AddAuthor(author, "");
-                        SqlDatabase.ChangeAuthor(id, author);
+                        SqlDatabase.ChangeAuthor(idsToSave[i], author);
                         break;
                     case "album_name":
-                        id = int.Parse(table.Rows[rowsToSave[i]].Cells[table.Columns["song_id"].Index].Value.ToString());
-                        string album = table.Rows[rowsToSave[i]].Cells[table.Columns["album_name"].Index].Value.ToString();
+                        string album = row.Cells[table.Columns["album_name"].Index].Value.ToString();
                         SqlDatabase.AddAlbum(album, 0);
-                        SqlDatabase.ChangeAlbum(id, album);
+                        SqlDatabase.ChangeAlbum(idsToSave[i], album);
                         break;
                     case "country_name":
-                        id = int.Parse(table.Rows[rowsToSave[i]].Cells[table.Columns["song_id"].Index].Value.ToString());
-                        string country = table.Rows[rowsToSave[i]].Cells[table.Columns["country_name"].Index].Value.ToString();
+                        string country = row.Cells[table.Columns["country_name"].Index].Value.ToString();
                         SqlDatabase.AddCountry(country);
-                        SqlDatabase.ChangeCountry(id, country);
+                        SqlDatabase.ChangeCountry(idsToSave[i], country);
                         break;
                     case "album_date":
-                        id = int.Parse(table.Rows[rowsToSave[i]].Cells[table.Columns["song_id"].Index].Value.ToString());
-                        int date = int.Parse(table.Rows[rowsToSave[i]].Cells[table.Columns["album_date"].Index].Value.ToString());
-                        SqlDatabase.ChangeAlbumDate(id, date);
+                        int date = int.Parse(row.Cells[table.Columns["album_date"].Index].Value.ToString());
+                        SqlDatabase.ChangeAlbumDate(idsToSave[i], date);
                         break;
                     case "song_date":
-                        id = int.Parse(table.Rows[rowsToSave[i]].Cells[table.Columns["song_id"].Index].Value.ToString());
-                        int date2 = int.Parse(table.Rows[rowsToSave[i]].Cells[table.Columns["song_date"].Index].Value.ToString());
-                        SqlDatabase.ChangeSongDate(id, date2);
+                        int date2 = int.Parse(row.Cells[table.Columns["song_date"].Index].Value.ToString());
+                        SqlDatabase.ChangeSongDate(idsToSave[i], date2);
                         break;
                 }
             }
+
+
         }
         private void Save()
         {
-            switch (CurState)
+            switch (CurRequest)
             {
-                case State.Albums: SaveAlbums(); break;
-                case State.Authors: SaveAuthors(); break;
+                case Table.Albums: SaveAlbums(); break;
+                case Table.Authors: SaveAuthors(); break;
                 default: SaveSongs();break;
             }
-            rowsToSave.Clear();
+            idsToSave.Clear();
             columnsToSave.Clear();
             changed = false;
-            MessageBox.Show("Сохранение прошло успешно!");
         }
         private void button2_Click(object sender, EventArgs e)
         {
+            Delete();
             Save();
+            
+            MessageBox.Show("Успешно сохранено!");
         }
-        private void UpdateTable()
+        private void LoadTable()
         {
-            if (CurState == State.AllSongs)
-                table.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
-            else
-                table.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             table.Rows.Clear();
             table.Columns.Clear();
             table.Refresh();
             List<List<string>> list = new List<List<string>>();
-            switch (CurState)
+            foreach (string s in SqlDatabase.GetColumnNames(CurRequest))
             {
-                case State.ShortSongs:
-                    list = SqlDatabase.LoadShort();
-                    break;
-                case State.MediumSongs:
-                    list = SqlDatabase.LoadMedium();
-                    break;
-                case State.AllSongs:
-                    list = SqlDatabase.LoadAll();
-                    break;
-                case State.Albums:
-                    list = SqlDatabase.LoadAlbums();
-                    break;
-                case State.Authors:
-                    list = SqlDatabase.LoadAuthors();
-                    break;
+                table.Columns.Add(s, GetProperName(s));
             }
 
-            foreach (string s in SqlDatabase.GetColumnNames(CurState))
+            switch (CurRequest)
             {
-                table.Columns.Add(s, s);
+                case Table.Import:
+                    ShowImport();
+                    UpdateAppearance();
+                    break;
+                case Table.Songs:
+                    list = SqlDatabase.LoadAll();
+                    UpdateAppearance();
+                    break;
+                case Table.Albums:
+                    table.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+                    list = SqlDatabase.LoadAlbums();
+                    break;
+                case Table.Authors:
+                    table.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+                    list = SqlDatabase.LoadAuthors();
+                    break;
+
             }
 
             foreach (var b in list)
             {
                 table.Rows.Add(b.ToArray());
             }
-            foreach(DataGridViewColumn column in table.Columns)
+            foreach (DataGridViewColumn column in table.Columns)
             {
                 column.SortMode = DataGridViewColumnSortMode.NotSortable;
             }
+        }
+        private void UpdateAppearance()
+        {
+            if (CurState == Appearance.AllSongs)
+                table.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+            else
+                table.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            switch (CurState)
+            {
+                case Appearance.AllSongs:
+                    SetTableAll();
+                    break;
+                case Appearance.MediumSongs:
+                    SetTableMedium();
+                    break;
+                case Appearance.ShortSongs:
+                    SetTableSimple();
+                    break;
+            }
+        }
+
+        private void SetTableSimple()
+        {
+            foreach(DataGridViewColumn column in table.Columns)
+            {
+                column.Visible = false;
+            }
+            table.Columns["song_id"].Visible = true;
+            table.Columns["song_name"].Visible = true;
+            table.Columns["author_name"].Visible = true;
+
+        }
+        private void SetTableMedium()
+        {
+            foreach (DataGridViewColumn column in table.Columns)
+            {
+                column.Visible = false;
+            }
+            table.Columns["song_id"].Visible = true;
+            table.Columns["song_name"].Visible = true;
+            table.Columns["author_name"].Visible = true;
+            table.Columns["album_name"].Visible = true;
+            table.Columns["duration"].Visible = true;
+
+
+        }
+        private void SetTableAll()
+        {
+            foreach (DataGridViewColumn column in table.Columns)
+            {
+                column.Visible = true;
+            }
+
         }
 
         private void MainForm_Load(object sender, EventArgs e)
@@ -377,17 +447,16 @@ namespace audioManager
 
         private void table_CellEndEdit(object sender, DataGridViewCellEventArgs e)
         {
-            switch (CurState)
+            switch (CurRequest)
             {
-                case State.AllSongs:
-                case State.ShortSongs:
-                case State.MediumSongs:
+                case Table.Songs:
+                case Table.Import:
                     CheckCorrectnessSongs(e);
                     break;
-                case State.Albums:
+                case Table.Albums:
                     CheckCorrectnessAlbums(e);
                     break;
-                case State.Authors:
+                case Table.Authors:
                     CheckCorrectnessAuthors(e);
                     break;
             }
@@ -423,9 +492,9 @@ namespace audioManager
             }
             if (table.Rows[e.RowIndex].Cells[e.ColumnIndex].Value != null && table.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString() != changingCell)
             {
-                if (!(rowsToSave.Contains(e.RowIndex) && columnsToSave.Contains(table.Columns[e.ColumnIndex].Name)))
+                if (!(idsToSave.Contains(e.RowIndex) && columnsToSave.Contains(table.Columns[e.ColumnIndex].Name)))
                 {
-                    rowsToSave.Add(e.RowIndex);
+                    idsToSave.Add(int.Parse(table.Rows[e.RowIndex].Cells[0].Value.ToString()));
                     columnsToSave.Add(table.Columns[e.ColumnIndex].Name);
                     changed = true;
                 }
@@ -456,9 +525,9 @@ namespace audioManager
             }
             if (table.Rows[e.RowIndex].Cells[e.ColumnIndex].Value != null && table.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString() != changingCell)
             {
-                if (!(rowsToSave.Contains(e.RowIndex) && columnsToSave.Contains(table.Columns[e.ColumnIndex].Name)))
+                if (!(idsToSave.Contains(e.RowIndex) && columnsToSave.Contains(table.Columns[e.ColumnIndex].Name)))
                 {
-                    rowsToSave.Add(e.RowIndex);
+                    idsToSave.Add(int.Parse(table.Rows[e.RowIndex].Cells[0].Value.ToString()));
                     columnsToSave.Add(table.Columns[e.ColumnIndex].Name);
                     changed = true;
                 }
@@ -523,9 +592,9 @@ namespace audioManager
 
             if (table.Rows[e.RowIndex].Cells[e.ColumnIndex].Value != null && table.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString() != changingCell)
             {
-                if (!(rowsToSave.Contains(e.RowIndex) && columnsToSave.Contains(table.Columns[e.ColumnIndex].Name)))
+                if (!(idsToSave.Contains(e.RowIndex) && columnsToSave.Contains(table.Columns[e.ColumnIndex].Name)))
                 {
-                    rowsToSave.Add(e.RowIndex);
+                    idsToSave.Add(int.Parse(table.Rows[e.RowIndex].Cells[0].Value.ToString()));
                     columnsToSave.Add(table.Columns[e.ColumnIndex].Name);
                     changed = true;
                 }
@@ -533,7 +602,8 @@ namespace audioManager
         }
         private void zeroitMetroButton6_Click(object sender, EventArgs e)
         {
-            UpdateTable();
+            LoadTable();
+
         }
 
         private void вывестиСписокАльбомовToolStripMenuItem_Click(object sender, EventArgs e)
@@ -541,7 +611,7 @@ namespace audioManager
             btnImport.Enabled = false;
             btnNoImport.Enabled = false;
 
-            if (CurState == State.Albums) return;
+            if (CurRequest == Table.Albums) return;
             if (changed)
             {
                 UserCheck check = new UserCheck();
@@ -557,10 +627,10 @@ namespace audioManager
                 
             }
             changed = false;
-            rowsToSave.Clear();
+            idsToSave.Clear();
             columnsToSave.Clear();
-            CurState = State.Albums;
-            UpdateTable();
+            CurRequest = Table.Albums;
+            LoadTable();
             settingsButton.Enabled = false;
 
         }
@@ -570,7 +640,7 @@ namespace audioManager
             btnImport.Enabled = true;
             btnNoImport.Enabled = true;
 
-            if (CurState == State.ShortSongs || CurState == State.MediumSongs || CurState == State.AllSongs) return;
+            if (CurRequest == Table.Songs) return;
             if (changed)
             {
                 UserCheck check = new UserCheck();
@@ -587,10 +657,11 @@ namespace audioManager
 
             }
             changed = false;
-            rowsToSave.Clear();
+            idsToSave.Clear();
+            idsToDelete.Clear();
             columnsToSave.Clear();
-            CurState = State.MediumSongs;
-            UpdateTable();
+            CurRequest = Table.Songs;
+            LoadTable();
             settingsButton.Enabled = true;
 
         }
@@ -608,7 +679,7 @@ namespace audioManager
         {
             btnImport.Enabled = false;
             btnNoImport.Enabled = false;
-            if (CurState == State.Authors) return;
+            if (CurRequest == Table.Authors) return;
             if (changed)
             {
                 UserCheck check = new UserCheck();
@@ -625,32 +696,27 @@ namespace audioManager
 
             }
             changed = false;
-            rowsToSave.Clear();
+            idsToSave.Clear();
+            idsToDelete.Clear();
+
             columnsToSave.Clear();
-            CurState = State.Authors;
-            UpdateTable();
+            CurRequest = Table.Authors;
+            LoadTable();
             settingsButton.Enabled = false;
         }
-
-        private void zeroitMetroButton3_Click(object sender, EventArgs e)
+        private void Delete()
         {
-            List<int> rows = new List<int>();
-            foreach(DataGridViewRow a in table.SelectedRows)
+            
+            if (idsToDelete.Count == 0) return;
+            switch (CurRequest)
             {
-                rows.Add(int.Parse(table.Rows[a.Index].Cells[0].Value.ToString()));
-            }
-            if (rows.Count == 0) return;
-            switch (CurState)
-            {
-                case State.AllSongs:
-                case State.MediumSongs:
-                case State.ShortSongs:
-                    SqlDatabase.DeleteSongs(rows);
+                case Table.Songs:
+                    SqlDatabase.DeleteSongs(idsToDelete);
                     break;
-                case State.Albums:
+                case Table.Albums:
                     try
                     {
-                        SqlDatabase.DeleteAlbums(rows);
+                        SqlDatabase.DeleteAlbums(idsToDelete);
                     }
                     catch (SqlException)
                     {
@@ -658,10 +724,10 @@ namespace audioManager
                         return;
                     }
                     break;
-                case State.Authors:
+                case Table.Authors:
                     try
                     {
-                        SqlDatabase.DeleteAuthors(rows);
+                        SqlDatabase.DeleteAuthors(idsToDelete);
                     }
                     catch (SqlException)
                     {
@@ -670,8 +736,27 @@ namespace audioManager
                     }
                     break;
             }
-            UpdateTable();
-            MessageBox.Show("Удаление прошло успешно!");
+            LoadTable();
+            idsToDelete.Clear();
+        }
+        private void zeroitMetroButton3_Click(object sender, EventArgs e)
+        {
+            foreach (DataGridViewRow a in table.SelectedRows)
+            {
+                int id = int.Parse(table.Rows[a.Index].Cells[0].Value.ToString());
+                a.Visible = false;
+                idsToDelete.Add(id);
+                if (idsToSave.Contains(id))
+                {
+                    idsToSave.Remove(id);
+                }
+                if (importList.Contains(a))
+                {
+                    importList.Remove(a);
+                    ShowImport();
+                }
+            }
+
         }
 
         private void импортироватьВExcelФайлToolStripMenuItem_Click(object sender, EventArgs e)
@@ -711,23 +796,30 @@ namespace audioManager
 
         private void импортироватьНаУстройствоToolStripMenuItem1_Click(object sender, EventArgs e)
         {
-            if (rowsToImport.Count == 0)
+            if (importList.Count == 0)
             {
-                MessageBox.Show("Сначала файлы для импорта");
+                MessageBox.Show("Сначала добавьте файлы для импорта");
                 return;
-
-
             }
             FolderBrowserDialog dialog = new FolderBrowserDialog();
+            List<int> rowsToImport = new List<int>();
+            foreach(DataGridViewRow row in importList)
+            {
+                rowsToImport.Add(int.Parse(row.Cells["song_id"].Value.ToString()));
+            }
             Copying copying = new Copying(rowsToImport);
             var res = dialog.ShowDialog();
-            
-            if(res == DialogResult.OK)
+
+            if (res == DialogResult.OK)
             {
                 copying.path = dialog.SelectedPath;
                 try
                 {
-                    copying.ShowDialog();
+                    if(copying.ShowDialog() != DialogResult.Cancel)
+                    {
+                        importList.Clear();
+
+                    }
                 }
                 catch (UnauthorizedAccessException)
                 {
@@ -735,21 +827,23 @@ namespace audioManager
                     return;
                 }
             }
-            rowsToImport.Clear();
+            
         }
         
 
         private void zeroitMetroButton5_Click(object sender, EventArgs e)
         {
+            
             foreach (DataGridViewRow row in table.SelectedRows)
             {
-                int id = int.Parse(row.Cells[0].Value.ToString());
-                if (!rowsToImport.Contains(id))
+                if (!importList.Contains(row))
                 {
-                    rowsToImport.Add(id);
+                    importList.Add(row);
+
                 }
             }
             MessageBox.Show("Добавлены выбранные элементы");
+
         }
 
         private void оПрограммеToolStripMenuItem_Click(object sender, EventArgs e)
@@ -761,29 +855,78 @@ namespace audioManager
         {
             foreach (DataGridViewRow row in table.SelectedRows)
             {
-                int id = int.Parse(row.Cells[0].Value.ToString());
-                if (rowsToImport.Contains(id))
+                if (importList.Contains(row))
                 {
-                    rowsToImport.Remove(id);
+                    importList.Remove(row);
                 }
             }
+            if (CurRequest == Table.Import) ShowImport();
             MessageBox.Show("Удалены выбранные элементы");
         }
 
         private void отобразитьВыбранныеПесниToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            foreach (DataGridViewRow row in table.Rows)
+            ShowImport();
+        }
+        private void ShowImport()
+        {
+            CurRequest = Table.Import;
+            table.Rows.Clear();
+            foreach (DataGridViewRow row in importList)
             {
+                table.Rows.Add(row);
+            }
+        }
+        private string GetProperName(string s)
+        {
+            switch (s)
+            {
+                case "song_name": return "Название";
+                case "album_name": return "Альбом";
+                case "id": return "Идентификатор";
+                case "duration": return "Длительность";
+                case "country_name": return "Название страны";
+                case "author_name": return "Исполнитель";
+                case "song_id": return "Идентификатор";
 
-                if (rowsToImport.Contains(int.Parse(row.Cells[0].Value.ToString())))
-                {
-                    row.Visible = true;
-                }
-                else
-                {
-                    row.Visible = false;
-                }
 
+            }
+            return s;
+        }
+        private void конструкторЗапросовToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Constructor constructor = new Constructor();
+            if (constructor.ShowDialog() == DialogResult.OK)
+            {
+                //constructor.result;
+                //constructor.cmd;
+
+
+                btnImport.Enabled = true;
+                btnNoImport.Enabled = true;
+
+                if (changed)
+                {
+                    UserCheck check = new UserCheck();
+                    var res = check.ShowDialog();
+                    if (res == DialogResult.OK)
+                    {
+                        Save();
+                    }
+                    else if (res == DialogResult.Abort)
+                    {
+
+                        return;
+                    }
+
+                }
+                changed = false;
+                idsToSave.Clear();
+                idsToDelete.Clear();
+                columnsToSave.Clear();
+                CurRequest = Table.Songs;
+                LoadTable();
+                settingsButton.Enabled = true;
             }
         }
     }

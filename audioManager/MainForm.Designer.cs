@@ -47,6 +47,7 @@
             this.импортироватьНаУстройствоToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.btnImport = new System.Windows.Forms.ToolStripMenuItem();
             this.btnNoImport = new System.Windows.Forms.ToolStripMenuItem();
+            this.отобразитьВыбранныеПесниToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.справкаToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.оПрограммеToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.searchBox = new System.Windows.Forms.TextBox();
@@ -56,9 +57,9 @@
             this.btnSave = new Zeroit.Framework.Metro.ZeroitMetroButton();
             this.zeroitMetroButton4 = new Zeroit.Framework.Metro.ZeroitMetroButton();
             this.settingsButton = new Zeroit.Framework.Metro.ZeroitMetroButton();
-            this.zeroitMetroButton6 = new Zeroit.Framework.Metro.ZeroitMetroButton();
+            this.updateTbl = new Zeroit.Framework.Metro.ZeroitMetroButton();
             this.deleteRow = new Zeroit.Framework.Metro.ZeroitMetroButton();
-            this.отобразитьВыбранныеПесниToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.конструкторЗапросовToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.dragControl1 = new BaseApp_TabControl.DragControl();
             ((System.ComponentModel.ISupportInitialize)(this.table)).BeginInit();
             this.menuStrip1.SuspendLayout();
@@ -120,6 +121,7 @@
             this.файлToolStripMenuItem,
             this.запросToolStripMenuItem,
             this.импортToolStripMenuItem,
+            this.конструкторЗапросовToolStripMenuItem,
             this.справкаToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 30);
             this.menuStrip1.Name = "menuStrip1";
@@ -143,14 +145,14 @@
             // добавитьФайлыToolStripMenuItem
             // 
             this.добавитьФайлыToolStripMenuItem.Name = "добавитьФайлыToolStripMenuItem";
-            this.добавитьФайлыToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.добавитьФайлыToolStripMenuItem.Size = new System.Drawing.Size(167, 22);
             this.добавитьФайлыToolStripMenuItem.Text = "Добавить файлы";
             this.добавитьФайлыToolStripMenuItem.Click += new System.EventHandler(this.добавитьФайлыToolStripMenuItem_Click);
             // 
             // добавитьПапкуToolStripMenuItem
             // 
             this.добавитьПапкуToolStripMenuItem.Name = "добавитьПапкуToolStripMenuItem";
-            this.добавитьПапкуToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.добавитьПапкуToolStripMenuItem.Size = new System.Drawing.Size(167, 22);
             this.добавитьПапкуToolStripMenuItem.Text = "Добавить папку";
             this.добавитьПапкуToolStripMenuItem.Click += new System.EventHandler(this.добавитьПапкуToolStripMenuItem_Click);
             // 
@@ -190,7 +192,7 @@
             // 
             this.импортироватьВExcelФайлToolStripMenuItem.Name = "импортироватьВExcelФайлToolStripMenuItem";
             this.импортироватьВExcelФайлToolStripMenuItem.Size = new System.Drawing.Size(244, 22);
-            this.импортироватьВExcelФайлToolStripMenuItem.Text = "Импортировать в Excel файл";
+            this.импортироватьВExcelФайлToolStripMenuItem.Text = "Экспортировать в Excel файл";
             this.импортироватьВExcelФайлToolStripMenuItem.Click += new System.EventHandler(this.импортироватьВExcelФайлToolStripMenuItem_Click);
             // 
             // импортToolStripMenuItem
@@ -201,29 +203,36 @@
             this.btnNoImport,
             this.отобразитьВыбранныеПесниToolStripMenuItem});
             this.импортToolStripMenuItem.Name = "импортToolStripMenuItem";
-            this.импортToolStripMenuItem.Size = new System.Drawing.Size(63, 20);
-            this.импортToolStripMenuItem.Text = "Импорт";
+            this.импортToolStripMenuItem.Size = new System.Drawing.Size(64, 20);
+            this.импортToolStripMenuItem.Text = "Экспорт";
             // 
             // импортироватьНаУстройствоToolStripMenuItem1
             // 
             this.импортироватьНаУстройствоToolStripMenuItem1.Name = "импортироватьНаУстройствоToolStripMenuItem1";
-            this.импортироватьНаУстройствоToolStripMenuItem1.Size = new System.Drawing.Size(249, 22);
-            this.импортироватьНаУстройствоToolStripMenuItem1.Text = "Импортировать";
+            this.импортироватьНаУстройствоToolStripMenuItem1.Size = new System.Drawing.Size(251, 22);
+            this.импортироватьНаУстройствоToolStripMenuItem1.Text = "Экспортировать";
             this.импортироватьНаУстройствоToolStripMenuItem1.Click += new System.EventHandler(this.импортироватьНаУстройствоToolStripMenuItem1_Click);
             // 
             // btnImport
             // 
             this.btnImport.Name = "btnImport";
-            this.btnImport.Size = new System.Drawing.Size(249, 22);
-            this.btnImport.Text = "Добавить выбранное в импорт";
+            this.btnImport.Size = new System.Drawing.Size(251, 22);
+            this.btnImport.Text = "Добавить выбранное в экспорт";
             this.btnImport.Click += new System.EventHandler(this.zeroitMetroButton5_Click);
             // 
             // btnNoImport
             // 
             this.btnNoImport.Name = "btnNoImport";
-            this.btnNoImport.Size = new System.Drawing.Size(249, 22);
-            this.btnNoImport.Text = "Удалить выбранное из импорта";
+            this.btnNoImport.Size = new System.Drawing.Size(251, 22);
+            this.btnNoImport.Text = "Удалить выбранное из экспорта";
             this.btnNoImport.Click += new System.EventHandler(this.btnNoImport_Click);
+            // 
+            // отобразитьВыбранныеПесниToolStripMenuItem
+            // 
+            this.отобразитьВыбранныеПесниToolStripMenuItem.Name = "отобразитьВыбранныеПесниToolStripMenuItem";
+            this.отобразитьВыбранныеПесниToolStripMenuItem.Size = new System.Drawing.Size(251, 22);
+            this.отобразитьВыбранныеПесниToolStripMenuItem.Text = "Отобразить выбранные песни";
+            this.отобразитьВыбранныеПесниToolStripMenuItem.Click += new System.EventHandler(this.отобразитьВыбранныеПесниToolStripMenuItem_Click);
             // 
             // справкаToolStripMenuItem
             // 
@@ -347,23 +356,23 @@
             this.settingsButton.Text = "Настройки вывода";
             this.settingsButton.Click += new System.EventHandler(this.button3_Click);
             // 
-            // zeroitMetroButton6
+            // updateTbl
             // 
-            this.zeroitMetroButton6.BackColor = System.Drawing.SystemColors.ActiveCaption;
-            this.zeroitMetroButton6.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-            this.zeroitMetroButton6.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(98)))), ((int)(((byte)(98)))), ((int)(((byte)(98)))));
-            this.zeroitMetroButton6.DefaultColor = System.Drawing.SystemColors.ActiveCaption;
-            this.zeroitMetroButton6.DisabledColor = System.Drawing.Color.FromArgb(((int)(((byte)(250)))), ((int)(((byte)(250)))), ((int)(((byte)(250)))));
-            this.zeroitMetroButton6.Font = new System.Drawing.Font("Segoe UI", 9F);
-            this.zeroitMetroButton6.HoverColor = System.Drawing.SystemColors.ActiveCaption;
-            this.zeroitMetroButton6.Location = new System.Drawing.Point(172, 60);
-            this.zeroitMetroButton6.Name = "zeroitMetroButton6";
-            this.zeroitMetroButton6.PressedColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(92)))), ((int)(((byte)(136)))));
-            this.zeroitMetroButton6.RoundingArc = 23;
-            this.zeroitMetroButton6.Size = new System.Drawing.Size(127, 23);
-            this.zeroitMetroButton6.TabIndex = 13;
-            this.zeroitMetroButton6.Text = "Обновить";
-            this.zeroitMetroButton6.Click += new System.EventHandler(this.zeroitMetroButton6_Click);
+            this.updateTbl.BackColor = System.Drawing.SystemColors.ActiveCaption;
+            this.updateTbl.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+            this.updateTbl.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(98)))), ((int)(((byte)(98)))), ((int)(((byte)(98)))));
+            this.updateTbl.DefaultColor = System.Drawing.SystemColors.ActiveCaption;
+            this.updateTbl.DisabledColor = System.Drawing.Color.FromArgb(((int)(((byte)(250)))), ((int)(((byte)(250)))), ((int)(((byte)(250)))));
+            this.updateTbl.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.updateTbl.HoverColor = System.Drawing.SystemColors.ActiveCaption;
+            this.updateTbl.Location = new System.Drawing.Point(172, 60);
+            this.updateTbl.Name = "updateTbl";
+            this.updateTbl.PressedColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(92)))), ((int)(((byte)(136)))));
+            this.updateTbl.RoundingArc = 23;
+            this.updateTbl.Size = new System.Drawing.Size(127, 23);
+            this.updateTbl.TabIndex = 13;
+            this.updateTbl.Text = "Обновить";
+            this.updateTbl.Click += new System.EventHandler(this.zeroitMetroButton6_Click);
             // 
             // deleteRow
             // 
@@ -383,12 +392,12 @@
             this.deleteRow.Text = "Удалить поле";
             this.deleteRow.Click += new System.EventHandler(this.zeroitMetroButton3_Click);
             // 
-            // отобразитьВыбранныеПесниToolStripMenuItem
+            // конструкторЗапросовToolStripMenuItem
             // 
-            this.отобразитьВыбранныеПесниToolStripMenuItem.Name = "отобразитьВыбранныеПесниToolStripMenuItem";
-            this.отобразитьВыбранныеПесниToolStripMenuItem.Size = new System.Drawing.Size(249, 22);
-            this.отобразитьВыбранныеПесниToolStripMenuItem.Text = "Отобразить выбранные песни";
-            this.отобразитьВыбранныеПесниToolStripMenuItem.Click += new System.EventHandler(this.отобразитьВыбранныеПесниToolStripMenuItem_Click);
+            this.конструкторЗапросовToolStripMenuItem.Name = "конструкторЗапросовToolStripMenuItem";
+            this.конструкторЗапросовToolStripMenuItem.Size = new System.Drawing.Size(143, 20);
+            this.конструкторЗапросовToolStripMenuItem.Text = "Конструктор запросов";
+            this.конструкторЗапросовToolStripMenuItem.Click += new System.EventHandler(this.конструкторЗапросовToolStripMenuItem_Click);
             // 
             // dragControl1
             // 
@@ -401,7 +410,7 @@
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(24)))), ((int)(((byte)(35)))));
             this.ClientSize = new System.Drawing.Size(780, 475);
             this.Controls.Add(this.deleteRow);
-            this.Controls.Add(this.zeroitMetroButton6);
+            this.Controls.Add(this.updateTbl);
             this.Controls.Add(this.settingsButton);
             this.Controls.Add(this.zeroitMetroButton4);
             this.Controls.Add(this.btnSave);
@@ -444,7 +453,7 @@
         private System.Windows.Forms.ToolStripMenuItem вывестиСписокПесенToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem вывестиСписокАльбомовToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem вывестиСписокИсполнителейToolStripMenuItem;
-        private Zeroit.Framework.Metro.ZeroitMetroButton zeroitMetroButton6;
+        private Zeroit.Framework.Metro.ZeroitMetroButton updateTbl;
         private Zeroit.Framework.Metro.ZeroitMetroButton deleteRow;
         private System.Windows.Forms.ToolStripMenuItem импортToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem импортироватьНаУстройствоToolStripMenuItem1;
@@ -452,6 +461,7 @@
         private System.Windows.Forms.ToolStripMenuItem btnImport;
         private System.Windows.Forms.ToolStripMenuItem btnNoImport;
         private System.Windows.Forms.ToolStripMenuItem отобразитьВыбранныеПесниToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem конструкторЗапросовToolStripMenuItem;
     }
 }
 
